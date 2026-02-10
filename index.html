@@ -1,19 +1,470 @@
-<!doctype html>
-<html>
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<title>My static Space</title>
-		<link rel="stylesheet" href="style.css" />
-	</head>
-	<body>
-		<div class="card">
-			<h1>Welcome to your static Space!</h1>
-			<p>You can modify this app directly by editing <i>index.html</i> in the Files and versions tab.</p>
-			<p>
-				Also don't forget to check the
-				<a href="https://huggingface.co/docs/hub/spaces" target="_blank">Spaces documentation</a>.
-			</p>
-		</div>
-	</body>
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build4Sun.homes | Premium Solar Solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0f1c;
+            overflow-x: hidden;
+        }
+
+        /* Solar Cell Grid Animation */
+        .solar-cell {
+            background: linear-gradient(145deg, #1e293b 0%, #0f172a 50%, #1e293b 100%);
+            border: 1px solid #334155;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .solar-cell::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(59, 130, 246, 0.1) 50%,
+                transparent 70%
+            );
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+
+        .solar-cell:hover::before {
+            animation: shimmer 1.5s ease-in-out;
+        }
+
+        .solar-cell:hover {
+            border-color: #60a5fa;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            transform: scale(1.02);
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+        }
+
+        /* Animated Sun Rays */
+        .sun-ray {
+            transform-origin: center;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Floating Energy Particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fbbf24;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fbbf24;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        input[type=range]::-webkit-slider-track {
+            background: #334155;
+            height: 6px;
+            border-radius: 3px;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #f59e0b;
+            border-radius: 50%;
+            margin-top: -7px;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        /* Error Modal Animation */
+        .modal-enter {
+            animation: modalSlide 0.3s ease-out forwards;
+        }
+
+        @keyframes modalSlide {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Pulse Animation for CTA */
+        .pulse-ring {
+            position: absolute;
+            border: 2px solid #f59e0b;
+            border-radius: 50%;
+            animation: pulse 2s ease-out infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* Grid Pattern Background */
+        .grid-pattern {
+            background-image: 
+                linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* Metallic Sheen Text */
+        .metallic-text {
+            background: linear-gradient(135deg, #64748b 0%, #94a3b8 50%, #64748b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="text-slate-300 grid-pattern min-h-screen relative">
+
+    <!-- Floating Particles Container -->
+    <div id="particles" class="fixed inset-0 pointer-events-none z-0"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass border-b border-slate-700/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center shadow-lg">
+                        <i data-lucide="sun" class="w-5 h-5 text-yellow-400"></i>
+                    </div>
+                    <span class="text-xl font-bold text-white tracking-tight">build4<span class="text-amber-500">sun</span>.homes</span>
+                </div>
+                <button onclick="showErrorModal()" class="relative px-6 py-2 bg-amber-500 hover:bg-amber-600 text-slate-900 font-semibold rounded-full transition-all duration-300 shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 group overflow-hidden">
+                    <span class="relative z-10">Get Quote</span>
+                    <div class="pulse-ring inset-0 absolute"></div>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Animated Sun -->
+    <section class="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
+        <!-- Animated Sun SVG Background -->
+        <div class="absolute inset-0 flex items-center justify-center opacity-30">
+            <svg class="w-[600px] h-[600px] sun-ray" viewBox="0 0 500 500">
+                <!-- Outer Rays -->
+                <g stroke="#f59e0b" stroke-width="2" fill="none" opacity="0.6">
+                    <line x1="250" y1="50" x2="250" y2="150" />
+                    <line x1="250" y1="450" x2="250" y2="350" />
+                    <line x1="50" y1="250" x2="150" y2="250" />
+                    <line x1="450" y1="250" x2="350" y2="250" />
+                    <line x1="91" y1="91" x2="162" y2="162" />
+                    <line x1="409" y1="91" x2="338" y2="162" />
+                    <line x1="91" y1="409" x2="162" y2="338" />
+                    <line x1="409" y1="409" x2="338" y2="338" />
+                </g>
+                <!-- Inner Core -->
+                <circle cx="250" cy="250" r="80" fill="url(#sunGradient)" />
+                <defs>
+                    <radialGradient id="sunGradient">
+                        <stop offset="0%" stop-color="#fbbf24" />
+                        <stop offset="50%" stop-color="#f59e0b" />
+                        <stop offset="100%" stop-color="#ea580c" />
+                    </radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
+            <div class="inline-block mb-4 px-4 py-1 rounded-full glass text-amber-400 text-sm font-medium border border-amber-500/30">
+                ⚡ Powering the Future
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+                Harness the <span class="metallic-text">Sun's Energy</span><br>
+                <span class="text-3xl md:text-5xl font-light text-slate-400">For Your Home</span>
+            </h1>
+            <p class="text-xl text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed">
+                Premium solar panel installation with cutting-edge photovoltaic technology. 
+                Join thousands of homeowners saving money while saving the planet.
+            </p>
+            
+            <!-- Interactive Solar Panel Preview -->
+            <div class="glass rounded-2xl p-8 max-w-3xl mx-auto border border-slate-700/50 shadow-2xl">
+                <div class="grid grid-cols-6 gap-1 mb-6" id="solarDemo">
+                    <!-- Generated by JS -->
+                </div>
+                <p class="text-sm text-slate-500">Interactive Solar Array Preview</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Savings Calculator Section -->
+    <section class="relative z-10 py-24 px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="glass rounded-3xl p-8 md:p-12 border border-slate-700/50 shadow-2xl">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Solar Savings Calculator</h2>
+                    <p class="text-slate-400">See how much you could save with clean energy</p>
+                </div>
+
+                <div class="space-y-8">
+                    <!-- Monthly Bill Slider -->
+                    <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                        <label class="block text-sm font-medium text-slate-300 mb-4">
+                            Average Monthly Electric Bill: <span id="billValue" class="text-amber-400 font-bold text-lg">$150</span>
+                        </label>
+                        <input type="range" id="billSlider" min="50" max="500" value="150" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+                        <div class="flex justify-between text-xs text-slate-500 mt-2">
+                            <span>$50</span>
+                            <span>$500+</span>
+                        </div>
+                    </div>
+
+                    <!-- Results Grid -->
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700 text-center group hover:border-amber-500/50 transition-colors">
+                            <div class="w-12 h-12 mx-auto mb-3 bg-blue-500/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <i data-lucide="zap" class="w-6 h-6 text-blue-400"></i>
+                            </div>
+                            <p class="text-sm text-slate-400 mb-1">Yearly Savings</p>
+                            <p id="yearlySavings" class="text-2xl font-bold text-white">$1,800</p>
+                        </div>
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700 text-center group hover:border-amber-500/50 transition-colors">
+                            <div class="w-12 h-12 mx-auto mb-3 bg-green-500/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <i data-lucide="tree-pine" class="w-6 h-6 text-green-400"></i>
+                            </div>
+                            <p class="text-sm text-slate-400 mb-1">CO₂ Offset</p>
+                            <p id="co2Offset" class="text-2xl font-bold text-white">4.2 tons</p>
+                        </div>
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700 text-center group hover:border-amber-500/50 transition-colors">
+                            <div class="w-12 h-12 mx-auto mb-3 bg-amber-500/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <i data-lucide="wallet" class="w-6 h-6 text-amber-400"></i>
+                            </div>
+                            <p class="text-sm text-slate-400 mb-1">25-Year Value</p>
+                            <p id="totalValue" class="text-2xl font-bold text-white">$45K</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 text-center">
+                        <button onclick="showErrorModal()" class="px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-bold rounded-xl shadow-lg shadow-amber-500/25 transition-all duration-300 transform hover:scale-101">
+                            Start Your Solar Journey
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <!-- Why Solar Section with Animated Cards -->
+    <section class="py-24 px-4 relative z-10">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-16">Why Choose <span class="text-amber-500">Build4Sun</span></h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="glass rounded-2xl p-8 border border-slate-700/50 hover:border-blue-500/50 transition-all duration-300 group cursor-pointer transform hover:-translate-y-2">
+                    <div class="w-14 h-14 bg-blue-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-blue-500/30 transition-all">
+                        <i data-lucide="shield-check" class="w-7 h-7 text-blue-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Premium Quality</h3>
+                    <p class="text-slate-400 leading-relaxed">Tier-1 solar panels with 25-year warranties and industry-leading efficiency ratings.</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass rounded-2xl p-8 border border-slate-700/50 hover:border-amber-500/50 transition-all duration-300 group cursor-pointer transform hover:-translate-y-2">
+                    <div class="w-14 h-14 bg-amber-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-amber-500/30 transition-all">
+                        <i data-lucide="settings" class="w-7 h-7 text-amber-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Smart Installation</h3>
+                    <p class="text-slate-400 leading-relaxed">Expert technicians with seamless integration and real-time monitoring systems.</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass rounded-2xl p-8 border border-slate-700/50 hover:border-green-500/50 transition-all duration-300 group cursor-pointer transform hover:-translate-y-2">
+                    <div class="w-14 h-14 bg-green-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-green-500/30 transition-all">
+                        <i data-lucide="trending-up" class="w-7 h-7 text-green-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Maximum ROI</h3>
+                    <p class="text-slate-400 leading-relaxed">See returns within 5-7 years with federal tax incentives and net metering benefits.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Minimal Footer -->
+    <footer class="border-t border-slate-800 py-12 px-4 relative z-10 bg-slate-900/50">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="mb-4">
+                <span class="text-2xl font-bold text-white">build4<span class="text-amber-500">sun</span>.homes</span>
+            </div>
+            <p class="text-slate-500 mb-4 max-w-md mx-auto italic">"Empowering homes with clean, renewable energy for a sustainable tomorrow."</p>
+            <p class="text-slate-600 text-sm">© 2026 Build4Sun Homes. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Error Modal -->
+    <div id="errorModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm">
+        <div class="glass rounded-2xl p-8 max-w-md mx-4 text-center border border-red-500/50 shadow-2xl modal-enter">
+            <div class="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="alert-circle" class="w-8 h-8 text-red-400"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">High Demand</h3>
+            <p class="text-slate-300 mb-6">We are currently experiencing too many requests. Please try again later or contact us directly.</p>
+            <button onclick="closeErrorModal()" class="px-6 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                container.appendChild(particle);
+                
+                // Animate each particle
+                gsap.to(particle, {
+                    y: -window.innerHeight,
+                    x: (Math.random() - 0.5) * 200,
+                    duration: Math.random() * 10 + 10,
+                    repeat: -1,
+                    ease: "none",
+                    delay: Math.random() * 5
+                });
+            }
+        }
+
+        // Create Solar Panel Demo Grid
+        function createSolarGrid() {
+            const grid = document.getElementById('solarDemo');
+            for (let i = 0; i < 24; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'solar-cell aspect-square rounded-sm';
+                grid.appendChild(cell);
+            }
+        }
+
+        // Savings Calculator Logic
+        const billSlider = document.getElementById('billSlider');
+        const billValue = document.getElementById('billValue');
+        const yearlySavings = document.getElementById('yearlySavings');
+        const co2Offset = document.getElementById('co2Offset');
+        const totalValue = document.getElementById('totalValue');
+
+        function updateCalculator() {
+            const bill = parseInt(billSlider.value);
+            const yearly = bill * 12 * 0.85; // 85% offset estimate
+            const co2 = (bill * 0.028).toFixed(1); // tons per year
+            const total = (yearly * 25).toLocaleString();
+
+            billValue.textContent = `$${bill}`;
+            yearlySavings.textContent = `$${yearly.toLocaleString()}`;
+            co2Offset.textContent = `${co2} tons`;
+            totalValue.textContent = `$${total}`;
+        }
+
+        billSlider.addEventListener('input', updateCalculator);
+
+        // Modal Functions
+        function showErrorModal() {
+            const modal = document.getElementById('errorModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function closeErrorModal() {
+            const modal = document.getElementById('errorModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Close modal on outside click
+        document.getElementById('errorModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeErrorModal();
+            }
+        });
+
+        // Initialize
+        createParticles();
+        createSolarGrid();
+        updateCalculator();
+
+        // Scroll animations
+        gsap.registerPlugin();
+        
+        gsap.from(".glass", {
+            scrollTrigger: {
+                trigger: ".glass",
+                start: "top 80%"
+            },
+            y: 50,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "power2.out"
+        });
+    </script>
+<script src="https://deepsite.hf.co/deepsite-badge.js"></script>
+</body>
 </html>
