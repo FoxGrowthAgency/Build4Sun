@@ -360,6 +360,115 @@
         </div>
     </section>
 
+    <!-- Interactive Neighborhood Animation Section -->
+    <section class="py-8 px-4 relative z-10 overflow-hidden">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-8">
+                <h3 class="text-2xl md:text-3xl font-bold text-white mb-2">See Your Street Transform</h3>
+                <p class="text-slate-400 text-sm">Scroll down to see solar panels install in real-time</p>
+            </div>
+            
+            <div class="glass rounded-3xl p-4 md:p-8 border border-slate-700/50 shadow-2xl relative" id="neighborhoodContainer" style="min-height: 400px;">
+                <svg viewBox="0 0 800 400" class="w-full h-auto" preserveAspectRatio="xMidYMid meet">
+                    <!-- Street -->
+                    <rect x="0" y="180" width="800" height="40" fill="#334155" rx="5"/>
+                    <line x1="0" y1="200" x2="800" y2="200" stroke="#475569" stroke-width="2" stroke-dasharray="20,20"/>
+                    
+                    <!-- House 1 (Left) -->
+                    <g id="house1" transform="translate(100, 80)">
+                        <!-- Building -->
+                        <rect x="0" y="20" width="120" height="80" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+                        <!-- Roof -->
+                        <polygon points="-10,20 60,-20 130,20" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+                        <!-- Driveway -->
+                        <rect x="40" y="100" width="40" height="80" fill="#475569"/>
+                        <!-- Solar Panels (Hidden initially) -->
+                        <g class="solar-panels-house1" opacity="0" transform="translate(10, -5)">
+                            <rect x="0" y="0" width="35" height="20" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1" rx="2"/>
+                            <rect x="37" y="0" width="35" height="20" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1" rx="2"/>
+                            <rect x="74" y="0" width="35" height="20" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1" rx="2"/>
+                            <!-- Grid lines on panels -->
+                            <line x1="12" y1="0" x2="12" y2="20" stroke="#60a5fa" stroke-width="0.5" opacity="0.5"/>
+                            <line x1="24" y1="0" x2="24" y2="20" stroke="#60a5fa" stroke-width="0.5" opacity="0.5"/>
+                            <line x1="49" y1="0" x2="49" y2="20" stroke="#60a5fa" stroke-width="0.5" opacity="0.5"/>
+                            <line x1="61" y1="0" x2="61" y2="20" stroke="#60a5fa" stroke-width="0.5" opacity="0.5"/>
+                            <line x1="86" y1="0" x2="86" y2="20" stroke="#60a5fa" stroke-width="0.5" opacity="0.5"/>
+                            <line x1="98" y1="0" x2="98" y2="20" stroke="#60a5fa" stroke-width="0.5" opacity="0.5"/>
+                        </g>
+                        <!-- Savings Popup (Hidden initially) -->
+                        <g class="savings-popup-house1" opacity="0" transform="translate(130, 20)">
+                            <rect x="0" y="0" width="80" height="30" fill="#065f46" rx="5" stroke="#10b981" stroke-width="1"/>
+                            <text x="40" y="20" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">Save $1,200</text>
+                            <polygon points="-5,15 0,10 0,20" fill="#065f46"/>
+                        </g>
+                    </g>
+
+                    <!-- House 2 (Center) -->
+                    <g id="house2" transform="translate(340, 60)">
+                        <!-- Building -->
+                        <rect x="0" y="30" width="140" height="90" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+                        <!-- Roof -->
+                        <polygon points="-10,30 70,-10 150,30" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+                        <!-- Driveway -->
+                        <rect x="50" y="120" width="40" height="60" fill="#475569"/>
+                        <!-- Solar Panels (Hidden initially) -->
+                        <g class="solar-panels-house2" opacity="0" transform="translate(15, -5)">
+                            <rect x="0" y="0" width="40" height="25" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1" rx="2"/>
+                            <rect x="42" y="0" width="40" height="25" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1" rx="2"/>
+                            <rect x="84" y="0" width="40" height="25" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1" rx="2"/>
+                            <line x1="13" y1="0" x2="13" y2="25" stroke="#60a5fa" stroke-width="0.5" opacity="0.5"/>
+                            <line x1="27" y1="0" x2="27" y2="25" stroke="#60a5fa" stroke-width="0.5" opacity="0.5"/>
+                            <line x1="55" y1="0" x2="55" y2="25" stroke="#60a5fa" stroke-width="0.5" opacity="0.5"/>
+                            <line x1="69" y1="0" x2="69" y2="25" stroke="#60a5fa" stroke-width="0.5" opacity="0.5"/>
+                            <line x1="97" y1="0" x2="97" y2="25" stroke="#60a5fa" stroke-width="0.5" opacity="0.5"/>
+                            <line x1="111" y1="0" x2="111" y2="25" stroke="#60a5fa" stroke-width="0.5" opacity="0.5"/>
+                        </g>
+                        <!-- Savings Popup (Hidden initially) -->
+                        <g class="savings-popup-house2" opacity="0" transform="translate(150, 30)">
+                            <rect x="0" y="0" width="90" height="30" fill="#065f46" rx="5" stroke="#10b981" stroke-width="1"/>
+                            <text x="45" y="20" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">Save $1,850</text>
+                            <polygon points="-5,15 0,10 0,20" fill="#065f46"/>
+                        </g>
+                    </g>
+
+                    <!-- House 3 (Right) -->
+                    <g id="house3" transform="translate(600, 90)">
+                        <!-- Building -->
+                        <rect x="0" y="20" width="110" height="70" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+                        <!-- Roof -->
+                        <polygon points="-10,20 55,-15 120,20" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+                        <!-- Driveway -->
+                        <rect x="35" y="90" width="40" height="90" fill="#475569"/>
+                        <!-- Solar Panels (Hidden initially) -->
+                        <g class="solar-panels-house3" opacity="0" transform="translate(10, -5)">
+                            <rect x="0" y="0" width="32" height="20" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1" rx="2"/>
+                            <rect x="34" y="0" width="32" height="20" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1" rx="2"/>
+                            <rect x="68" y="0" width="32" height="20" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1" rx="2"/>
+                            <line x1="11" y1="0" x2="11" y2="20" stroke="#60a5fa" stroke-width="0.5" opacity="0.5"/>
+                            <line x1="21" y1="0" x2="21" y2="20" stroke="#60a5fa" stroke-width="0.5" opacity="0.5"/>
+                            <line x1="45" y1="0" x2="45" y2="20" stroke="#60a5fa" stroke-width="0.5" opacity="0.5"/>
+                            <line x1="55" y1="0" x2="55" y2="20" stroke="#60a5fa" stroke-width="0.5" opacity="0.5"/>
+                            <line x1="79" y1="0" x2="79" y2="20" stroke="#60a5fa" stroke-width="0.5" opacity="0.5"/>
+                            <line x1="89" y1="0" x2="89" y2="20" stroke="#60a5fa" stroke-width="0.5" opacity="0.5"/>
+                        </g>
+                        <!-- Savings Popup (Hidden initially) -->
+                        <g class="savings-popup-house3" opacity="0" transform="translate(120, 20)">
+                            <rect x="0" y="0" width="85" height="30" fill="#065f46" rx="5" stroke="#10b981" stroke-width="1"/>
+                            <text x="42.5" y="20" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">Save $1,400</text>
+                            <polygon points="-5,15 0,10 0,20" fill="#065f46"/>
+                        </g>
+                    </g>
+
+                    <!-- Trees -->
+                    <circle cx="50" cy="250" r="15" fill="#065f46" opacity="0.8"/>
+                    <circle cx="250" cy="280" r="20" fill="#065f46" opacity="0.8"/>
+                    <circle cx="530" cy="260" r="18" fill="#065f46" opacity="0.8"/>
+                    <circle cx="750" cy="270" r="16" fill="#065f46" opacity="0.8"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
     <!-- Final CTA Section -->
     <section class="pt-4 pb-8 px-4 relative z-10 text-center">
         <div class="max-w-2xl mx-auto">
@@ -492,9 +601,75 @@
         createSolarGrid();
         updateCalculator();
 
-        // Scroll animations
-        gsap.registerPlugin();
-        
+        // Scroll animations for neighborhood section
+        function initNeighborhoodAnimation() {
+            const container = document.getElementById('neighborhoodContainer');
+            
+            // House 1 animation
+            gsap.timeline({
+                scrollTrigger: {
+                    trigger: container,
+                    start: "top 70%",
+                    toggleActions: "play none none reverse"
+                }
+            })
+            .to(".solar-panels-house1", {
+                opacity: 1,
+                duration: 0.6,
+                ease: "power2.inOut"
+            })
+            .to(".savings-popup-house1", {
+                opacity: 1,
+                x: "+=10",
+                duration: 0.4,
+                ease: "back.out(1.7)"
+            }, "+=0.2");
+
+            // House 2 animation (slight delay)
+            gsap.timeline({
+                scrollTrigger: {
+                    trigger: container,
+                    start: "top 60%",
+                    toggleActions: "play none none reverse"
+                }
+            })
+            .to(".solar-panels-house2", {
+                opacity: 1,
+                duration: 0.6,
+                ease: "power2.inOut"
+            })
+            .to(".savings-popup-house2", {
+                opacity: 1,
+                x: "+=10",
+                duration: 0.4,
+                ease: "back.out(1.7)"
+            }, "+=0.2");
+
+            // House 3 animation (more delay)
+            gsap.timeline({
+                scrollTrigger: {
+                    trigger: container,
+                    start: "top 50%",
+                    toggleActions: "play none none reverse"
+                }
+            })
+            .to(".solar-panels-house3", {
+                opacity: 1,
+                duration: 0.6,
+                ease: "power2.inOut"
+            })
+            .to(".savings-popup-house3", {
+                opacity: 1,
+                x: "+=10",
+                duration: 0.4,
+                ease: "back.out(1.7)"
+            }, "+=0.2");
+        }
+
+        // Initialize neighborhood animation
+        initNeighborhoodAnimation();
+
+        // Scroll animations for other elements
         gsap.from(".glass", {
             scrollTrigger: {
                 trigger: ".glass",
