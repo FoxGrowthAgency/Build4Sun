@@ -91,34 +91,46 @@
         }
 
         /* Custom Range Slider */
-        input[type=range] {
-            -webkit-appearance: none;
-            appearance: none;
-            background: transparent;
-            cursor: pointer;
-        }
-
-        input[type=range]::-webkit-slider-track {
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 8px;
             background: #334155;
-            height: 6px;
-            border-radius: 3px;
+            border-radius: 4px;
         }
 
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
+        .slider-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+            border-radius: 4px;
+            transition: width 0.1s ease-out;
+        }
+
+        .slider-thumb {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
             width: 20px;
             height: 20px;
             background: #f59e0b;
             border-radius: 50%;
-            margin-top: -7px;
-            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
-            cursor: pointer;
-            transition: transform 0.1s;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.6), 0 2px 4px rgba(0,0,0,0.3);
+            pointer-events: none;
+            transition: all 0.1s ease-out;
+            z-index: 5;
         }
 
-        input[type=range]::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
+        input[type=range] {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 10;
         }
 
         /* Error Modal Animation */
@@ -261,7 +273,11 @@
                         <label class="block text-sm font-medium text-slate-300 mb-4">
                             Average Monthly Electric Bill: <span id="billValue" class="text-amber-400 font-bold text-lg">$150</span>
                         </label>
-                        <input type="range" id="billSlider" min="50" max="500" value="150" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+                        <div class="relative w-full h-2 bg-slate-700 rounded-full">
+                            <div id="sliderFill" class="absolute left-0 top-0 h-full bg-green-500 rounded-full pointer-events-none" style="width: 22%;"></div>
+                            <input type="range" id="billSlider" min="50" max="500" value="150" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                            <div id="sliderThumb" class="absolute top-1/2 -translate-y-1/2 w-5 h-5 bg-amber-400 rounded-full shadow-lg shadow-amber-500/50 pointer-events-none transition-all duration-75" style="left: 22%;"></div>
+                        </div>
                         <div class="flex justify-between text-xs text-slate-500 mt-2">
                             <span>$50</span>
                             <span>$500+</span>
@@ -298,12 +314,17 @@
                             Start Your Solar Journey
                         </button>
                     </div>
+                    
+                    <div class="mt-6 flex items-start gap-2 text-xs text-slate-500">
+                        <span class="text-amber-400 text-lg leading-none">*</span>
+                        <p>Savings estimates based on official Australian Energy Regulator (AER) benchmark data and average sunlight hours. Actual results may vary depending on location, system size, and usage patterns.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
     <!-- Why Solar Section with Animated Cards -->
-    <section class="py-24 px-4 relative z-10">
+    <section class="py-12 px-4 relative z-10">
         <div class="max-w-6xl mx-auto">
             <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-6">Why Choose <span class="text-amber-500">Build4Sun</span></h2>
             <p class="text-center text-slate-400 max-w-2xl mx-auto mb-16 text-lg">We combine cutting-edge solar technology with exceptional customer service to deliver seamless installations that maximize your energy savings. Our certified technicians ensure every system is optimized for peak performance, while our transparent pricing and 25-year warranties give you complete peace of mind.</p>
@@ -340,7 +361,7 @@
     </section>
 
     <!-- Final CTA Section -->
-    <section class="py-16 px-4 relative z-10 text-center">
+    <section class="py-8 px-4 relative z-10 text-center">
         <div class="max-w-2xl mx-auto">
             <h3 class="text-2xl font-bold text-white mb-6">Ready to Start Saving?</h3>
             <button onclick="showErrorModal()" class="relative px-8 py-4 bg-amber-500 hover:bg-amber-600 text-slate-900 font-semibold rounded-full transition-all duration-300 shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 group overflow-hidden">
@@ -420,17 +441,27 @@
         const yearlySavings = document.getElementById('yearlySavings');
         const co2Offset = document.getElementById('co2Offset');
         const totalValue = document.getElementById('totalValue');
+        const sliderFill = document.getElementById('sliderFill');
+        const sliderThumb = document.getElementById('sliderThumb');
 
         function updateCalculator() {
             const bill = parseInt(billSlider.value);
+            const min = parseInt(billSlider.min);
+            const max = parseInt(billSlider.max);
+            const percentage = ((bill - min) / (max - min)) * 100;
+            
             const yearly = bill * 12 * 0.85; // 85% offset estimate
             const co2 = (bill * 0.028).toFixed(1); // tons per year
             const total = (yearly * 25).toLocaleString();
 
-            billValue.textContent = `$${bill}`;
-            yearlySavings.textContent = `$${yearly.toLocaleString()}`;
+            billValue.textContent = `${bill}`;
+            yearlySavings.textContent = `${yearly.toLocaleString()}`;
             co2Offset.textContent = `${co2} tons`;
-            totalValue.textContent = `$${total}`;
+            totalValue.textContent = `${total}`;
+            
+            // Update slider visual elements
+            sliderFill.style.width = `${percentage}%`;
+            sliderThumb.style.left = `${percentage}%`;
         }
 
         billSlider.addEventListener('input', updateCalculator);
@@ -476,6 +507,5 @@
             ease: "power2.out"
         });
     </script>
-<script src="https://deepsite.hf.co/deepsite-badge.js"></script>
 </body>
 </html>
