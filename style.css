@@ -1,6 +1,7 @@
 body {
-	padding: 2rem;
-	font-family: -apple-system, BlinkMacSystemFont, "Arial", sans-serif;
+	 padding: 0;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Arial", sans-serif;
 }
 
 h1 {
